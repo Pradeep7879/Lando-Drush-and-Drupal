@@ -103,5 +103,5 @@ tooling:
     service: appserver
     description: 'Run npm locally'
     cmd:
-      - npm
+      - npmm
 
