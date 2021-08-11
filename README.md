@@ -15,93 +15,93 @@ It create the .lando.yml file, all configuration used in your project, find here
 example file below .lando.yml
 ----------------------------
 
-name: drupal-project-name
-recipe: drupal9
-config:
-  via: nginx  
-  webroot: docroot  
-  database: mariadb:10.4    
-  composer_version: '2.0.8'  
-  php: '7.4'  
-  drush: '^10'  
-  xdebug: false
-
-
-services:
-  appserver:
+    name: drupal-project-name
+    recipe: drupal9
     config:
-      php: lando/php.ini
-    scanner: false
-    overrides:
-      environment:
-        MYSQL_HOSTNAME: 'database'
-        MYSQL_DATABASE: 'drupal9'
-        MYSQL_PASSWORD: 'drupal9'
-        MYSQL_PORT: '3306'
-        MYSQL_USER: 'drupal9'
-        DRUSH_OPTIONS_URI: 'http://drupal-project.lndo.site'
-        DRUSH_OPTIONS_ROOT: '/app'
-        PHP_IDE_CONFIG: 'serverName=drupal-project.lndo.site'
-        COMPOSE_HTTP_TIMEOUT: 3600
-        PWD: '/app'
-        MINK_DRIVER_ARGS: '["chrome", null, "http://chromedriver:4444/wd/hub"]'
-        MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", null, "http://chromedriver:4444/wd/hub"]'
-        MINK_DRIVER_CLASS: 'Drupal\FunctionalJavascriptTests\DrupalSelenium2Driver'
-    build_as_root:
-      - curl -sL https://deb.nodesource.com/setup_12.x | bash -
-      - apt-get install -y nodejs
-      - npm install -g grunt-cli
-    build:
-      #- /app/lando/composer/preinstall.sh
-      - /app/lando/appserver.build.sh
+      via: nginx  
+      webroot: docroot  
+      database: mariadb:10.4    
+      composer_version: '2.0.8'  
+      php: '7.4'  
+      drush: '^10'  
+      xdebug: false
 
-  node:
-    type: node:12
-    ssl: false
-    scanner: false
-    port: 6006
-    overrides:
-      environment:
-        NODE_ENV: "development"
-    command: tail -f /dev/null
 
-  mailhog:
-    type: mailhog
-    hogfrom:
-      - appserver
-
-  phpcs:
-    type: compose
     services:
-      image: pathtoproject/phpcs-drupal:latest
-      command: tail -f /dev/null
+      appserver:
+        config:
+          php: lando/php.ini
+        scanner: false
+        overrides:
+          environment:
+            MYSQL_HOSTNAME: 'database'
+            MYSQL_DATABASE: 'drupal9'
+            MYSQL_PASSWORD: 'drupal9'
+            MYSQL_PORT: '3306'
+            MYSQL_USER: 'drupal9'
+            DRUSH_OPTIONS_URI: 'http://drupal-project.lndo.site'
+            DRUSH_OPTIONS_ROOT: '/app'
+            PHP_IDE_CONFIG: 'serverName=drupal-project.lndo.site'
+            COMPOSE_HTTP_TIMEOUT: 3600
+            PWD: '/app'
+            MINK_DRIVER_ARGS: '["chrome", null, "http://chromedriver:4444/wd/hub"]'
+            MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", null, "http://chromedriver:4444/wd/hub"]'
+            MINK_DRIVER_CLASS: 'Drupal\FunctionalJavascriptTests\DrupalSelenium2Driver'
+        build_as_root:
+          - curl -sL https://deb.nodesource.com/setup_12.x | bash -
+          - apt-get install -y nodejs
+          - npm install -g grunt-cli
+        build:
+          #- /app/lando/composer/preinstall.sh
+          - /app/lando/appserver.build.sh
 
-proxy:
-  mailhog:
-    - drupal-ugm.mh.lndo.site
+      node:
+        type: node:12
+        ssl: false
+        scanner: false
+        port: 6006
+        overrides:
+          environment:
+            NODE_ENV: "development"
+        command: tail -f /dev/null
 
-tooling:
-  phpcs:
-    service: phpcs
-    description: 'Run PHPCS locally'
-    dir: /app
-    cmd:
-      - phpcs
+      mailhog:
+        type: mailhog
+        hogfrom:
+          - appserver
 
-  blt:
-    service: appserver
-    cmd: /app/vendor/bin/blt
+      phpcs:
+        type: compose
+        services:
+          image: pathtoproject/phpcs-drupal:latest
+          command: tail -f /dev/null
 
-  phpcbf:
-    service: phpcs
-    description: 'Run PHPCBF locally'
-    dir: /app
-    cmd:
-      - phpcbf
+    proxy:
+      mailhog:
+        - drupal-ugm.mh.lndo.site
 
-  npm:
-    service: appserver
-    description: 'Run npm locally'
-    cmd:
-      - npm
+    tooling:
+      phpcs:
+        service: phpcs
+        description: 'Run PHPCS locally'
+        dir: /app
+        cmd:
+          - phpcs
+
+      blt:
+        service: appserver
+        cmd: /app/vendor/bin/blt
+
+      phpcbf:
+        service: phpcs
+        description: 'Run PHPCBF locally'
+        dir: /app
+        cmd:
+          - phpcbf
+
+      npm:
+        service: appserver
+        description: 'Run npm locally'
+        cmd:
+          - npm
 
