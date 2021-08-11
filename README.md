@@ -16,14 +16,24 @@ example file below .lando.yml
 ----------------------------
 
 name: drupal-project-name
+
 recipe: drupal9
+
 config:
+
   via: nginx
+  
   webroot: docroot
+  
   database: mariadb:10.4
+  
+  
   composer_version: '2.0.8'
+  
   php: '7.4'
+  
   drush: '^10'
+  
   xdebug: false
 
 
@@ -103,5 +113,5 @@ tooling:
     service: appserver
     description: 'Run npm locally'
     cmd:
-      - npmm
+      - npm
 
