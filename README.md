@@ -9,6 +9,8 @@ run command
 1.  lando init
 2.  lando build/rebuid(you will need to lando rebuild your app for those changes to be applied.)
 3.  lando info
+4.  lando db-import file_name.sql
+5.  lando db-export
 
 It create the .lando.yml file, all configuration used in your project, find here.
 
