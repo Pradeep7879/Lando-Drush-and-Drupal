@@ -11,7 +11,9 @@ run command
 3.  lando info
 
 It create the .lando.yml file, all configuration used in your project, find here.
+
 example file below .lando.yml
+----------------------------
 
 name: drupal-project-name
 recipe: drupal9
