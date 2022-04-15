@@ -107,8 +107,48 @@ example file below .lando.yml
         cmd:
           - npm
 
-=========================================================================================================================
+----------------------
 
    Some Useful link to setup the Lando
    
      http://www.learnwebtech.in/install-drupal-9-using-composer-with-lando/
+     
+     
+----------------------
+
+other way to create Lando.yml file with node, npm and gulp using lando
+    
+    name: d9-d
+    recipe: drupal9
+    config:
+      webroot: web
+      xdebug: true
+    services:
+      database:
+        type: mysql
+        portforward: true
+        healthcheck: ""
+      appserver:
+        type: php:7.4
+        build_as_root:
+          - a2enmod headers proxy proxy_http proxy_fcgi proxy_ajp
+      solr:
+        type: solr:7
+        portforward: true
+        # config:
+        #   dir: web/modules/contrib/search_api_solr/jump-start/solr7/config-set
+      node:
+        type: node:14
+        # build:
+        #   - npm install
+        #   - gulp
+        globals:
+          gulp-cli: latest
+    tooling:
+      npm:
+        service: node
+      node:
+        service: node
+      gulp:
+        service: node
+
